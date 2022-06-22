@@ -202,12 +202,13 @@ $(document).ready(function(){
 							<td>
 								<!--상품 재고가 있는 경우 -->
 								<c:if test="${cl.p_stock != 0 and cl.p_status == 1}"> 
-								<div class="table_text_align_center cart_qty_div" style="display:flex;">
-									<button class="minus_btn btn btn-default"  onClick="minus(${cl.cart_no});">-</button>
-									<input type="text" name="cart_qty" value="${cl.cart_qty}" id="cart_qty_input" class="cart_qty_input_${cl.cart_no} form-control">
-									<button class="plus_btn btn btn-default" onClick="plus(${cl.cart_no});">+</button>
-									<button class="qty_modify_btn btn btn-default" name="qty_modify_btn_${cl.cart_no}" data-cart_no="${cl.cart_no}" onclick="update(${cl.cart_no});">변경</button>
-								</div>
+									<!-- 상품 수량 수정 버튼 -->
+									<div class="table_text_align_center cart_qty_div" style="display:flex;">
+										<button class="minus_btn btn btn-default"  onClick="minus(${cl.cart_no});">-</button>
+										<input type="text" name="cart_qty" value="${cl.cart_qty}" id="cart_qty_input" class="cart_qty_input_${cl.cart_no} form-control">
+										<button class="plus_btn btn btn-default" onClick="plus(${cl.cart_no});">+</button>
+										<button class="qty_modify_btn btn btn-default" name="qty_modify_btn_${cl.cart_no}" onclick="update(${cl.cart_no});">변경</button>
+									</div>
 								</c:if>
 								<!-- 품절된 상품 -->
 								<c:if test="${cl.p_stock == 0 }"> 
@@ -244,8 +245,7 @@ $(document).ready(function(){
 							  </div>
 							</td>
 							<td class="table_text_align_center">
-								<input type="hidden" name="cart_no" value="${cl.cart_no}">
-								<button class="delete_btn btn btn-default" data-cart_no="${cl.cart_no}"
+								<button class="delete_btn btn btn-default" onClick="Delete(${cl.cart_no});"
 								         style="margin-top:35px;">삭제</button>
 							</td>
 						</tr>
@@ -272,22 +272,11 @@ $(document).ready(function(){
 			
 		<div class="goShoping_div">
 			<button class="btn btn-success shoping_btn">쇼핑 계속하기</button>
-			<button class="btn btn-success allDelete_btn">장바구니 비우기</button>
+			<button class="btn btn-success allDelete_btn" onClick="allDelete();">장바구니 비우기</button>
 		</div>
 		</c:if>
       </div>
     </div>
-
-	<!-- 삭제 form -->
-    <form action="cartDelete.do" method="post" class="delete_form">
- 		<input type="hidden" name="cart_no" class="delete_cart_no">
-    </form>
-	
-	<!-- 수량 수정 form -->
-	<form method="post" action="cartQtyUpdate.do" class="qty_update_form">	
-		<input type="hidden" name="cart_no" class="update_cart_no">	
-		<input type="hidden" name="cart_qty" class="update_cart_qty">	
-	</form>
 	
 	<!-- 주문 form -->
     <form action="order.do" method="get" class="order_form">
@@ -301,19 +290,6 @@ $(document).ready(function(){
 		location.href="main.do"
 	});
 
-	// 상품 수량 버튼
-/*  	$(".plus_btn").on("click", function(){
-		let qty = $(this).parent("div").find("input").val();
-		
-		$(this).parent("div").find("input").val(++qty);
-		
-	}); */
-/* 	$(".minus_btn").on("click", function(){
-		let qty = $(this).parent("div").find("input").val();
-		if(qty > 1){
-		$(this).parent("div").find("input").val(--qty);
-		}	
-	});  */
 	// 상품 수량 버튼	
 	function plus(n){
 		let qty = parseInt($(".cart_qty_input_"+n).val());
@@ -332,8 +308,11 @@ $(document).ready(function(){
 	
 	// 상품 수량 수정 버튼
  	function update(n){
-		let cart_no = n
-		let c_qty = parseInt($(".cart_qty_input_"+n).val());
+ 		// 장바구니 PK
+		let cart_no = n;
+		// 장바구니 상품 수량
+		let c_qty = parseInt($(".cart_qty_input_"+n).val()); 
+		// 장바구니 상품 재고
 		let stock = parseInt($(".p_stock_input_"+n).val());
 
 		// 상품 재고 유효성 검사
@@ -341,27 +320,51 @@ $(document).ready(function(){
 		    alert("재고가 없습니다. 선택할 수 있는 최대 상품 수량은 "+stock+"개 입니다.");
 		    $(".cart_qty_input_"+n).val(1);
 		}else{ 
-			$(".update_cart_no").val(cart_no);
-			$(".update_cart_qty").val(c_qty);
-			$(".qty_update_form").submit();
+ 			$.post("cartQtyUpdate.do",
+ 					{ "cart_no" : n, 
+ 					  "cart_qty" : c_qty },
+ 					function(result){
+ 				       if(result == 1){
+ 					   	 alert("상품 수량을 변경하였습니다.");
+ 					   	 location.reload();
+ 				       }else{
+ 				    	 alert("상품 수량 변경 실패");  
+ 				       }	   
+ 			}); // post() end
  	    }  
 	} 
 	
 	// 장바구니 개별 상품 삭제 버튼
-	$(".delete_btn").on("click",function(e){
-		e.preventDefault();
-		const cart_no = $(this).data("cart_no");
-		$(".delete_cart_no").val(cart_no);
-		$(".delete_form").submit();
-	});
+	function Delete(n){
+		let cart_no = n;
+		let check = confirm("해당 상품을 장바구니에서 삭제하시겠습니까?");
+		if(check){
+			$.post("cartDelete.do", { "cart_no" : n },
+ 					function(result){
+ 				       if(result == 1){
+ 					   	 location.reload();
+ 				       }else{
+ 				    	 alert("상품 삭제 실패");  
+ 				       }	   
+ 			}); // post() end 
+		}
+	}
 	
 	// 장바구니 비우기 버튼
-	$(".allDelete_btn").on("click",function(){
-		var check = confirm("장바구니를 비우겠습니까?");
+	function allDelete(){
+		let check = confirm("장바구니를 비우시겠습니까?");
+		let m_email = "${sessionScope.m_email}";
 		if(check){
-			location.href="allCartDelete.do";
+			$.post("allCartDelete.do", { "m_email" : m_email },
+ 					function(result){
+ 				       if(result > 0){
+ 					   	 location.reload();
+ 				       }else{
+ 				    	 alert("장바구니 비우기 실패");  
+ 				       }	   
+ 			}); // post() end 
 		}
-	})	
+	}	
 	
 	// 전체선택일때 하나라도 체크박스 해제할 경우 
 	function check(n){

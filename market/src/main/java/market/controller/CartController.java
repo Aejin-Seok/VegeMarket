@@ -87,42 +87,36 @@ public class CartController {
 	
 	// 장바구니 상품 수량 수정
 	@RequestMapping("cartQtyUpdate.do")
-	public String cartQtyUpdate(HttpSession session, CartDTO cart, Model model) throws Exception {
+	public String cartQtyUpdate(CartDTO cart, Model model) throws Exception {
 		System.out.println("cart_no:"+cart.getCart_no());
 		System.out.println("cart_qty:"+cart.getCart_qty());
-
-		String m_email = (String)session.getAttribute("m_email");
-		System.out.println("m_email:"+m_email);
 		
-		cs.update(cart);
+		int result = cs.update(cart);
 		
-		return "redirect:cartList.do?m_email=m_email";
+		model.addAttribute("result", result);
+		return "cart/cartQtyUpdateResult";
 	}
 	
 	// 장바구니 개별상품 삭제
 	@RequestMapping("cartDelete.do")
-	public String cartDelete(HttpSession session, int cart_no, Model model) throws Exception {
-		System.out.println("cart_no:"+cart_no);
+	public String cartDelete(int cart_no, Model model) throws Exception {
 		
-		String m_email = (String)session.getAttribute("m_email");
-		System.out.println("m_email:"+m_email);
-		
-		cs.delete(cart_no);
+		int result = cs.delete(cart_no);
 		System.out.println("삭제 완료");
 		
-		return "redirect:cartList.do?m_email=m_email";
+		model.addAttribute("result", result);
+		return "cart/cartDeleteResult";
 	}
 	
 	// 장바구니 전체 삭제
 	@RequestMapping("allCartDelete.do")
-	public String allCartDelete(HttpSession session) {
-		String m_email = (String)session.getAttribute("m_email");
-		System.out.println("m_email:"+m_email);
+	public String allCartDelete(String m_email, Model model) {
 		
-		cs.allDelete(m_email);
+		int result = cs.allDelete(m_email);
 		System.out.println("전체 삭제 완료");
 		
-		return "redirect:cartList.do?m_email=m_email";
+		model.addAttribute("result", result);
+		return "cart/cartDeleteResult";
 	}
 	
 }

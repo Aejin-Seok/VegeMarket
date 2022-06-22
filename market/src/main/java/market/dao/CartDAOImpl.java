@@ -42,18 +42,18 @@ public class CartDAOImpl implements CartDAO{
 	}
 	
 	@Override
-	public void update(CartDTO cart) {
-		sst.update("cartns.update", cart);
+	public int update(CartDTO cart) {
+		return sst.update("cartns.update", cart);
 	}
 
 	@Override
-	public void delete(int cart_no) {
-		sst.delete("cartns.delete", cart_no);
+	public int delete(int cart_no) {
+		return sst.delete("cartns.delete", cart_no);
 	}
 
 	@Override
-	public void allDelete(String m_email) {
-		sst.delete("cartns.allDelete", m_email);
+	public int allDelete(String m_email) {
+		return sst.delete("cartns.allDelete", m_email);
 	}
 
 	@Override

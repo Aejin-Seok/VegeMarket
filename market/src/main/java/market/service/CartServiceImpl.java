@@ -46,18 +46,18 @@ public class CartServiceImpl implements CartService{
 	}
 	
 	@Override
-	public void update(CartDTO cart) {
-		cd.update(cart);
+	public int update(CartDTO cart) {
+		return cd.update(cart);
 	}
 
 	@Override
-	public void delete(int cart_no) {
-		cd.delete(cart_no);
+	public int delete(int cart_no) {
+		return cd.delete(cart_no);
 	}
 
 	@Override
-	public void allDelete(String m_email) {
-		cd.allDelete(m_email);
+	public int allDelete(String m_email) {
+		return cd.allDelete(m_email);
 	}
 
 	@Override

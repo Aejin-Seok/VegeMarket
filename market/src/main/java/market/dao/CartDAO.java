@@ -13,8 +13,8 @@ public interface CartDAO {
 	List<CartDTO> getShopNo(String m_email);
 	List<CartDTO> list(String m_email);
 	List<FollowDTO> getFollowList(String m_email);
-	void update(CartDTO cart);
-	void delete(int cart_no);
-	void allDelete(String m_email);
+	int update(CartDTO cart);
+	int delete(int cart_no);
+	int allDelete(String m_email);
 	int deleteOrderCart(CartDTO cart);
 }

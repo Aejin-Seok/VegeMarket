@@ -178,7 +178,9 @@
 <script>
 	// 구매 수량 버튼 
 	$(".plus_btn").on("click", function(){
+		// 선택 수량
 		let qty = parseInt($(this).parent("div").find("input").val());
+		// 상품 재고
 		let p_stock = parseInt(${product.p_stock});
 		$(this).parent("div").find("input").val(++qty);
 		// 상품 재고 유효성 검사
@@ -231,8 +233,11 @@
 
 		// 장바구니 담기 버튼
 		$(".cart_btn").click(function(){
+			// 상품 번호
 			var p_no = ${product.p_no};
+			// 상품 수량
 			var cart_qty = $(".cart_qty").val();
+			// 상품 타입 (1:일반상품/2:팔로우특가상품/3.공동구매상품)
 			var op_type = "1";
 			
  			$.post("cartInsert.do",
