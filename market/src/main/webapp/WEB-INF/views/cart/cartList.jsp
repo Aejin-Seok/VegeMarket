@@ -87,6 +87,10 @@ input[type="checkbox"]{
 #p_info_div{
 	margin-top:28px;
 }
+#delete_label{
+	margin-top:30px;
+	margin-bottom:30px;
+}
 
 
 
@@ -271,6 +275,7 @@ $(document).ready(function(){
 			
 			
 		<div class="goShoping_div">
+			<label id="delete_label">※장바구니에 담긴 상품은 30일동안 보관되며, 이후 자동 삭제됩니다.※</label>	<br>
 			<button class="btn btn-success shoping_btn">쇼핑 계속하기</button>
 			<button class="btn btn-success allDelete_btn" onClick="allDelete();">장바구니 비우기</button>
 		</div>

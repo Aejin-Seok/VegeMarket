@@ -61,6 +61,11 @@ public class CartDAOImpl implements CartDAO{
 		return sst.delete("cartns.deleteOrderCart", cart);
 	}
 
+	@Override
+	public void autoCartDelete() {
+		sst.delete("autoCartDelete");
+	}
+
 
 
 

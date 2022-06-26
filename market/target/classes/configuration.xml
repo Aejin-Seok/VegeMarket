@@ -3,8 +3,6 @@
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-		<typeAlias alias="board" type="market.model.Board" />
-		<typeAlias alias="rb" type="market.model.ReplyBoard" />
 		<typeAlias alias="cart" type="market.model.CartDTO" />
 		<typeAlias alias="category" type="market.model.CategoryDTO" />
 		<typeAlias alias="coupon" type="market.model.CouponDTO" />

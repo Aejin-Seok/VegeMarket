@@ -65,6 +65,11 @@ public class CartServiceImpl implements CartService{
 		return cd.deleteOrderCart(cart);
 	}
 
+	@Override
+	public void autoCartDelete() {
+		cd.autoCartDelete();
+	}
+
 
 
 

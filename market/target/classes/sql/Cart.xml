@@ -52,5 +52,12 @@
 		delete from cart where m_email=#{m_email} and p_no=#{p_no}
 	</delete>
 	
+	<!-- 등록일로부터 30일 지난 장바구니 자동 삭제 -->
+	<delete id="autoCartDelete">
+	<![CDATA[
+		delete from cart where 
+		cart_regdate <= to_char(sysdate-30,'yyyy-mm-dd')
+	]]>	
+	</delete>
 	
 </mapper>

@@ -16,4 +16,5 @@ public interface CartService {
 	int delete(int cart_no);
 	int allDelete(String m_email);
     int deleteOrderCart(CartDTO cart);
+    void autoCartDelete();
 }
